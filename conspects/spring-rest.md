@@ -90,3 +90,21 @@ HTTP-ответ состоит из:
 
 
 6. Добавляем Томкат.
+
+### Получение списка работников
+Создаем новый контроллер, прописываем request mapping, внедряем сервис:
+```java
+@RestController
+@RequestMapping("/api")
+public class MyRestController {
+    @Autowired
+    private EmployeeService employeeService;
+}
+```
+Добавляем метод, возвращающий всех работников, прописываем ему соответсвующую аннотацию:
+```java
+@GetMapping("/employees")
+public List<Employee> getAllEmployees() {
+    return employeeService.getAllEmployees();
+}
+```

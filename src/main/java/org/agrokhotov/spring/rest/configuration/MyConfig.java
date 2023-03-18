@@ -40,14 +40,15 @@ public class MyConfig {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.show_sql", "true");
 
-        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactory().setDataSource(dataSource());
-        sessionFactory().setPackagesToScan("org.agrokhotov.spring.rest.entity");
-        sessionFactory().setHibernateProperties(hibernateProperties);
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan("org.agrokhotov.spring.rest.entity");
+        sessionFactory.setHibernateProperties(hibernateProperties);
 
-        return sessionFactory();
+        return sessionFactory;
     }
 
+    @Bean
     public HibernateTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
