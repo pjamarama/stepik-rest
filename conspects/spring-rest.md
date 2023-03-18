@@ -108,3 +108,23 @@ public List<Employee> getAllEmployees() {
     return employeeService.getAllEmployees();
 }
 ```
+
+
+### Получение одного работника
+Для получения работника по id используется аннотация @PathVariable:
+```java
+@GetMapping("/employee/{id}")
+public Employee getEmployee(@PathVariable int id) {
+    return employeeService.getEmployee(id);
+}
+```
+
+### Обработка исключений
+Создадим отдельный пакет под исключения exceptions.   
+Создаем класс EmployeeIncorrectData.   
+Создаем исключение NoSuchEmployeeException. Переопределяем конструктор с сообщением.   
+Обрабатываем исключение в соответствующем методе контроллера.  
+
+Нам также требуется exception handler, который будет заполнять JSON сообщением с исключением. Создаем метод и помечаем его аннотацией @ExceptionHandler. Метод параметризирован классом EmployeeIncorrectData, это тип объекта, который добавляется в HTTP response body. Метод принимает аргументом требуемое исключение NoSuchEmployeeException и возвращает ResponseEntity, обертку над HTTP response.
+
+Чтобы реагировать на другие исключения, можно перегрузить метод exception handler, оставив ему то же имя, но изменив передаваемый аргумент с NoSuchEmployeeException на Exception и поменяв http status code на более подходящий. Тогда исключения с ненайденным Employee и все остальные исключения будут обрабатываться с разными сообщениями. 
