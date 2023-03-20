@@ -126,5 +126,31 @@ public Employee getEmployee(@PathVariable int id) {
 Обрабатываем исключение в соответствующем методе контроллера.  
 
 Нам также требуется exception handler, который будет заполнять JSON сообщением с исключением. Создаем метод и помечаем его аннотацией @ExceptionHandler. Метод параметризирован классом EmployeeIncorrectData, это тип объекта, который добавляется в HTTP response body. Метод принимает аргументом требуемое исключение NoSuchEmployeeException и возвращает ResponseEntity, обертку над HTTP response.
+```java
+@ExceptionHandler
+public ResponseEntity<EmployeeIncorrectData> handleException(NoSuchEmployeeException e) {
+    EmployeeIncorrectData data = new EmployeeIncorrectData();
+    data.setInfo(e.getMessage());
+    return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+}
+```
 
 Чтобы реагировать на другие исключения, можно перегрузить метод exception handler, оставив ему то же имя, но изменив передаваемый аргумент с NoSuchEmployeeException на Exception и поменяв http status code на более подходящий. Тогда исключения с ненайденным Employee и все остальные исключения будут обрабатываться с разными сообщениями. 
+
+
+### Глобальная обработка исключений
+Хэндлить эксепшены в контроллере - не лучшие практики, так как в проекте может быть несколько контроллеров. С ними следует работать глобально, например, в ExceptionAdvice.
+![img.png](pics/exception-advice.png)
+
+У аннотации **@ControllerAdvice** несколько функций, но для обработки исключений нас интересует функционал Global Exception Handler'а.
+
+В пакете exceptions создадим класс EmployeeGlobalExceptionHandler, пропишем над ним аннотацию **@ControllerAdvice**. Перенесем из контроллера в этот класс два exceptionHandler-метода.
+
+
+### Добавление нового работника
+Отправляем данные о работнике, возвращаем данные того же работника, но уже с айдишником:
+![img.png](pics/add-new-employee.png)
+
+Появляется пара новых аннотаций:
+- PostMapping связывает HTTP POST-запрос с методом контроллера
+- RequestBody связывает тело HTTP-метода с параметром метода контроллера
