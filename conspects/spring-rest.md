@@ -154,3 +154,23 @@ public ResponseEntity<EmployeeIncorrectData> handleException(NoSuchEmployeeExcep
 Появляется пара новых аннотаций:
 - PostMapping связывает HTTP POST-запрос с методом контроллера
 - RequestBody связывает тело HTTP-метода с параметром метода контроллера
+
+### Обновление данных о работнике
+В общем-то, аналогично созданию работника, но другая аннотация маппинга:
+```java
+@PutMapping("/employees")
+public Employee updateEmployee(@RequestBody Employee employee) {
+    employeeService.saveEmployee(employee);
+    return employee;
+}
+```
+
+### Удаление работника
+Создаем в контроллере метод, который принимает int id и возвращает текст, что работник с этим id удален:
+```java
+@DeleteMapping("/employee/{id}")
+public String deleteEmployee(@PathVariable int id) {
+    employeeService.deleteEmployee(id);
+    return "Employee with id " + " was deleted";
+}
+```
